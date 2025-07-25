@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Let Me Know You Better 💬</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('cute-bg.jpg'); /* Your background image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+    /* Shared card style for homepage and questions */
+   .card-box {
+  text-align: center;
+  background: rgba(255, 240, 246, 0.4); /* semi-transparent */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px 20px;
+  box-shadow: 0 8px 20px rgba(255, 175, 204, 0.3);
+  backdrop-filter: blur(12px); /* blur effect */
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+  animation: fadeIn 0.8s ease;
+}
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2 {
+      color: #ff69a6;
+    }
+
+    h3 {
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px 20px;
+      background: #ffafcc;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ff8fab;
+    }
+
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background: #ffe5ec;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .comment {
+      font-style: italic;
+      color: #666;
+      font-size: 0.95em;
+      margin: 15px 0;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+<audio autoplay loop hidden>
+  <source src="ilu.mp3" type="audio/mpeg" />
+</audio>
+
+  <div id="quiz">
+    <div class="card-box" id="homepage">
+      <h1>Let Me Know You Better 💭</h1>
+      <p>Since I’m a bit shy to ask these questions, I made this site just for you, my bebe love — so sweet!</p>
+      <button onclick="startQuiz()">💡 Start Quiz</button>
+    </div>
+
+    <div class="card-box" id="questionContainer" style="display: none;"></div>
+  </div>
+
+  <div id="result"></div>
+
+  <div style="position: fixed; bottom: 20px; right: 20px;">
+  <button onclick="toggleMusic()" style="padding: 10px 15px; border-radius: 10px; background: #ffafcc; border: none; cursor: pointer;">
+    🎵 Toggle Music
+  </button>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="ilu.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+  <script>
+    function toggleMusic() {
+  const music = document.getElementById("bgMusic");
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
+}
+    const questions = [
+      {
+        text: "What’s your go-to fast food chain?",
+        options: [
+          { text: "Jollibee", comment: "Kung sa Jollibee bida ang saya... sa puso ko, ikaw ang bida.🐝❤️" },
+          { text: "Chowking", comment: "Chao Fan ka ba? Kasi kahit anong ulam, bagay ka sa lahat ng gusto ko" },
+          { text: "McDonalds", comment: "Sa Mcdo, Love ko 'to. Pero sa'yo? Love kita~" },
+          { text: "KFC", comment: "Chicken ka ba ng KFC? Kasi kahit simpleng tingin mo palang — It’s finger lickin’ good ang kilig ko!." }
+        ]
+      },
+      {
+        text: "What’s your biggest turn-off in someone?",
+        options: [
+          { text: "Being too clingy", comment: "Hala ako na agad 'to' 💨." },
+          { text: "Lying or hiding things", comment: "Trust issues? Nah. Just standards. 🧐" },
+          { text: "Mixed signals", comment: "You deserve clarity, not confusion 🔍." },
+          { text: "Being too dramatic", comment: "Too much drama like me kapag nag ooverthink XD🍿." }
+        ]
+      },
+      {
+        text: "What’s your perfect weekend?",
+        options: [
+          { text: "Sleeping in all day", comment: "You deserve rest — pero kausapin mo pa rin ako hmph 😴." },
+          { text: "Hanging out with friends", comment: "Gala alert 🚨 yayain mo din kaya ako? dejk lang XD." },
+          { text: "Gaming/watching series", comment: "Gaymer ka rin? gaya-gaya ka ha!." },
+          { text: "Movie Marathon", comment: " Weh? parang 'di ka naman nanonood ng movie eh 🌟." }
+        ]
+      },
+      {
+        text: "Pick a vibe:",
+        options: [
+          { text: "Rainy day with hoodie on", comment: "Cuddle weather connoisseur ka pala? ☔🧸." },
+          { text: "Sunset walks", comment: "You’re soft person and probably (amoy araw, dejk) smell amazing 🌇." },
+          { text: "Starry night talks", comment: "The ‘let’s talk about life’ type of person 🌌." },
+          { text: "Loud night with music and people", comment: "Luh extrovert ka pala talaga?🎶✨." }
+        ]
+      },
+      {
+        text: "How do you usually reply when you’re not in the mood to talk?",
+        options: [
+          { text: "I leave it on seen", comment: "Yun seener pala bebe ko?." },
+          { text: "I reply short but polite", comment: "Ba't naman magiging polite pa? baradagulan na tayo oh." },
+          { text: "I say “brb” or “talk later”", comment: "BRB for Babye Relapse lang ako Bai? " },
+          { text: "I'm still the same", comment: "Ihh paano ko na malalaman ngayon yan." }
+        ]
+      }
+    ];
+
+    const homepage = document.getElementById('homepage');
+    const questionContainer = document.getElementById('questionContainer');
+    const result = document.getElementById('result');
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    function startQuiz() {
+      homepage.style.display = 'none';
+      questionContainer.style.display = 'block';
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionContainer.innerHTML = `<h3>Q${currentQuestion + 1}: ${q.text}</h3>
+        ${q.options.map(opt => `
+          <button onclick="selectAnswer('${opt.text.replace(/'/g, "\\'")}', \`${opt.comment.replace(/`/g, "\\`")}\`, this)">
+            ${opt.text}
+          </button>
+        `).join('')}
+        <div id="feedback"></div>`;
+    }
+
+    function selectAnswer(answer, comment, btn) {
+      const allButtons = questionContainer.querySelectorAll("button");
+      allButtons.forEach(b => b.disabled = true);
+
+      answers.push({ answer, comment });
+
+      const feedback = document.getElementById('feedback');
+      feedback.innerHTML = `<div class="comment">${comment}</div>
+        <button onclick="nextQuestion()">Next</button>`;
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      questionContainer.style.display = 'none';
+      result.style.display = 'block';
+      result.innerHTML = `<h2>Your Answers ✨</h2>
+        <ul>${answers.map((a, i) => `
+          <li><strong>Q${i + 1}:</strong> ${a.answer}<div class='comment'>${a.comment}</div></li>
+        `).join('')}</ul>
+        <p><em>Thanks for sharing a little piece of you. Send me sagot mo ah HAHAHAHAHA.
+            PS: Nabored kasi attuu wala kasi ikaw, eh sumabay pa ako tulog sayo kagabi. 😌</em></p>`;
+    }
+  </script>
+</body>
+</html>
